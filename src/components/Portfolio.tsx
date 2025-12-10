@@ -17,10 +17,10 @@ const projects = [
     description: "Solución digital para estudios de tatuaje con sistema de reservas avanzado y gestión de artistas similar a StyleCut.",
   },
   {
-    title: "Restaurante Gourmet",
-    category: "Landing Page",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
-    description: "Sitio web elegante para restaurante con reservas online integradas.",
+    title: "DriveMaster CRM",
+    category: "CRM & Gestión",
+    image: "/portfolio_driving_school.png",
+    description: "Sistema integral de gestión para autoescuelas: control de alumnos, agenda de profesores y seguimiento de flota.",
   },
   {
     title: "App Financiera",

@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Lock, Hammer } from "lucide-react";
 import { Button } from "./ui/button";
 
 const projects = [
@@ -9,36 +9,42 @@ const projects = [
     category: "Sistema de Gestión",
     image: "/portfolio_hairdresser.png",
     description: "Plataforma completa para peluquerías: web para clientes con citas online y panel de administración para gestión de agenda.",
+    status: "active",
   },
   {
     title: "Ink Masters Studio",
     category: "Web App & Reservas",
     image: "/portfolio_tattoo.png",
     description: "Solución digital para estudios de tatuaje con sistema de reservas avanzado y gestión de artistas similar a StyleCut.",
+    status: "active",
   },
   {
     title: "DriveMaster CRM",
     category: "CRM & Gestión",
     image: "/portfolio_driving_school.png",
     description: "Sistema integral de gestión para autoescuelas: control de alumnos, agenda de profesores y seguimiento de flota.",
+    status: "active",
   },
   {
-    title: "App Financiera",
-    category: "Dashboard",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
-    description: "Dashboard interactivo para gestión financiera con visualización de datos.",
+    title: "Próximamente",
+    category: "En Desarrollo",
+    image: "/optia_logo.jpg",
+    description: "Información no disponible por el momento.",
+    status: "coming_soon",
   },
   {
-    title: "Inmobiliaria Luxury",
-    category: "Portal Web",
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
-    description: "Portal inmobiliario de lujo con búsqueda avanzada y tours virtuales.",
+    title: "Próximamente",
+    category: "En Desarrollo",
+    image: "/optia_logo.jpg",
+    description: "Información no disponible por el momento.",
+    status: "coming_soon",
   },
   {
-    title: "Agencia Creativa",
-    category: "Portfolio",
-    image: "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&q=80",
-    description: "Portfolio creativo con animaciones inmersivas y diseño único.",
+    title: "Próximamente",
+    category: "En Desarrollo",
+    image: "/optia_logo.jpg",
+    description: "Información no disponible por el momento.",
+    status: "in_progress",
   },
 ];
 
@@ -73,22 +79,62 @@ const Portfolio = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group relative rounded-xl overflow-hidden bg-card border border-border hover:border-primary/30 hover:glow transition-all duration-500"
+              className={`group relative rounded-xl overflow-hidden bg-card border border-border transition-all duration-500 ${project.status === "active"
+                ? "hover:border-primary/30 hover:glow"
+                : "opacity-80"
+                }`}
             >
-              <div className="aspect-video overflow-hidden">
+              <div className="aspect-video overflow-hidden relative">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className={`w-full h-full object-cover transition-transform duration-700 ${project.status === "active"
+                    ? "group-hover:scale-110"
+                    : "grayscale filter blur-[2px]"
+                    }`}
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent transition-opacity duration-500 ${project.status === "active"
+                    ? "opacity-0 group-hover:opacity-100"
+                    : "opacity-100 bg-black/40 flex items-center justify-center backdrop-blur-[1px]"
+                    }`}
+                >
+                  {project.status !== "active" && (
+                    <div className="bg-background/90 border border-primary/20 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 transform -rotate-3 hover:scale-105 transition-transform">
+                      {project.status === "coming_soon" ? (
+                        <>
+                          <Lock className="w-4 h-4 text-primary" />
+                          <span className="text-primary font-semibold text-sm">
+                            Próximamente
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <Hammer className="w-4 h-4 text-primary" />
+                          <span className="text-primary font-semibold text-sm">
+                            En Construcción
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="p-6">
-                <span className="text-primary text-sm font-medium">
-                  {project.category}
-                </span>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-primary text-sm font-medium">
+                    {project.category}
+                  </span>
+                  {project.status !== "active" && (
+                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground border border-border px-2 py-0.5 rounded-full">
+                      {project.status === "coming_soon"
+                        ? "Coming Soon"
+                        : "WIP"}
+                    </span>
+                  )}
+                </div>
                 <h3 className="text-xl font-semibold mt-1 mb-2">
                   {project.title}
                 </h3>
@@ -98,10 +144,18 @@ const Portfolio = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-primary/30 hover:bg-primary/10 hover:border-primary group/btn"
+                  disabled={project.status !== "active"}
+                  className={`border-primary/30 hover:bg-primary/10 hover:border-primary group/btn ${project.status !== "active" ? "opacity-50" : ""
+                    }`}
                 >
-                  Ver Proyecto
-                  <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                  {project.status === "active" ? (
+                    <>
+                      Ver Proyecto
+                      <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                    </>
+                  ) : (
+                    <span>No Disponible</span>
+                  )}
                 </Button>
               </div>
             </motion.div>
